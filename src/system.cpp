@@ -2,6 +2,7 @@
 
 #include <unistd.h>
 
+#include <algorithm>  //DEBUG: maybe not needed
 #include <cstddef>
 #include <set>
 #include <string>
@@ -38,6 +39,7 @@ vector<Process>& System::Processes() {
     }
     pids_ = newPids;
   }
+  std::sort(processes_.begin(), processes_.end());
   return processes_;
 }
 
