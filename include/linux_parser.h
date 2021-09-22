@@ -40,7 +40,7 @@ enum CPUStates {
   kGuest_,
   kGuestNice_
 };
-
+// Process states
 enum ProccessStates {
   pUtime_ = 13,
   pStime_,
@@ -52,7 +52,6 @@ enum ProccessStates {
 std::vector<std::string> CpuUtilization();
 long Jiffies(const std::vector<std::string>& stats);
 long ActiveJiffies(const std::vector<std::string>& stats);
-long ProcessActiveJiffies(const std::vector<std::string>& stats);
 long IdleJiffies(const std::vector<std::string>& stats);
 
 // Processes
@@ -61,11 +60,8 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
-
-// helper functions and variables
 std::vector<std::string> ReadProcStats(int pid);
-
-// std::vector<std::string> utilazationCPU;  // TODO: verify if necessary
+long ProcessActiveJiffies(const std::vector<std::string>& stats);
 };  // namespace LinuxParser
 
 #endif

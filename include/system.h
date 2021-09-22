@@ -9,6 +9,7 @@
 
 class System {
  public:
+  System();  // DEBUG: maybe not needed
   Processor& Cpu();
   std::vector<Process>& Processes();  // TODO: See src/system.cpp
   float MemoryUtilization() const;
@@ -20,8 +21,11 @@ class System {
 
   // TODO: Define any necessary private members
  private:
-  Processor cpu_ = {};
-  std::vector<Process> processes_ = {};
+  Processor cpu_{};
+  std::string osName_;
+  std::string kernel_;
+  std::vector<int> pids_;
+  std::vector<Process> processes_;
 };
 
 #endif
