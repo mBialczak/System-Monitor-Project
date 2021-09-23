@@ -17,30 +17,35 @@ using std::string;
 using std::vector;
 
 System::System()
-    : osName_(LinuxParser::OperatingSystem()),
-      kernel_(LinuxParser::Kernel()),
-      pids_(LinuxParser::Pids()) {
-  for (const auto& pid : pids_) {
-    processes_.emplace_back(Process(pid));
-  }
-}
+    : osName_(LinuxParser::OperatingSystem()), kernel_(LinuxParser::Kernel()) {}
+//     pids_(LinuxParser::Pids()) { //DEBUG:
+// for (const auto& pid : pids_) {
+//   processes_.emplace_back(Process(pid));
+// }
 
 Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-  // get current pids list and compare to previous
-  vector<int> newPids{LinuxParser::Pids()};
-  // if newPids != pids need to update all processes
-  if (newPids != pids_) {
-    processes_.clear();
-    for (const auto& pid : newPids) {
-      processes_.emplace_back(Process(pid));
-    }
-    pids_ = newPids;
+  vector<int> Pids{LinuxParser::Pids()};
+  processes_.clear();
+  for (auto pid : Pids) {
+    processes_.emplace_back(Process(pid));
   }
   std::sort(processes_.begin(), processes_.end());
   return processes_;
+  // DEBUG: old version below
+  // get current pids list and compare to previous
+  // vector<int> newPids{LinuxParser::Pids()};
+  // // if newPids != pids need to update all processes
+  // if (newPids != pids_) {
+  //   processes_.clear();
+  //   for (const auto& pid : newPids) {
+  //     processes_.emplace_back(Process(pid));
+  //   }
+  //   pids_ = newPids;
+  // }
+  // return processes_;
 }
 
 // Return the system's kernel identifier (string)

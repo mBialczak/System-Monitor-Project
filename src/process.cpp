@@ -17,7 +17,7 @@ using std::to_string;
 using std::vector;
 using namespace std::literals::chrono_literals;
 
-Process::Process(int pid) : pid_(pid){};
+Process::Process(int pid) : pid_(pid) { cpuUtilization_ = CpuUtilization(); };
 
 //  Return this process's ID
 int Process::Pid() const { return pid_; }
@@ -31,7 +31,10 @@ float Process::CpuUtilization() const {
   float procTotalTime =
       static_cast<float>(procActiveJiffies) / sysconf(_SC_CLK_TCK);
   // Read process start time
-  float procStartTime = std::stof(stats[LinuxParser::pStartTime_]);
+  float procStartTime{};
+  if (!stats.empty()) {
+    procStartTime = std::stof(stats[LinuxParser::pStartTime_]);
+  }
   // Convert process start time to seconds
   procStartTime /= sysconf(_SC_CLK_TCK);
   // elapsed time in second since the process started;
@@ -53,5 +56,5 @@ long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }
 
 bool Process::operator<(const Process& other) const {  // DEBUG:
   // return CpuUtilization() < other.CpuUtilization();
-  return pid_ > other.pid_;
+  return cpuUtilization_ > other.cpuUtilization_;
 }

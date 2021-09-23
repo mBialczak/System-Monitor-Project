@@ -79,6 +79,7 @@ float LinuxParser::MemoryUtilization() {
   string line, key;
   float MemTotal{0.0};
   float MemFree{0.0};
+  float result{0.0};
   ifstream stream{kProcDirectory + kMeminfoFilename};
   if (stream) {
     getline(stream, line);
@@ -89,9 +90,8 @@ float LinuxParser::MemoryUtilization() {
     istringstream streamFree(line);
     streamFree >> key;
     if (key == "MemFree:") streamFree >> MemFree;
+    if (MemTotal) result = (MemTotal - MemFree) / MemTotal;
   }
-  float result{0.0};
-  if (MemTotal) result = (MemTotal - MemFree) / MemTotal;
   return result;
 }
 // Read and return the system uptime
@@ -111,26 +111,42 @@ long LinuxParser::Jiffies(const vector<string>& stats) {
 
 //  Read and return the number of active jiffies for a Process
 long LinuxParser::ProcessActiveJiffies(const vector<string>& stats) {
-  long uTime = std::stod(stats[pUtime_]);
-  long sTime = std::stod(stats[pStime_]);
+  long uTime{};
+  long sTime{};
+  if (!stats.empty()) {
+    uTime = std::stod(stats[pUtime_]);
+    sTime = std::stod(stats[pStime_]);
+  }
   return uTime + sTime;
 }
 
 // Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies(const vector<string>& stats) {
-  long user = stol(stats[kUser_]);
-  long nice = stol(stats[kNice_]);
-  long system = stol(stats[kSystem_]);
-  long irq = stol(stats[kIRQ_]);
-  long softirq = stol(stats[kSoftIRQ_]);
-  long steal = stol(stats[kSteal_]);
+  long user{};
+  long nice{};
+  long system{};
+  long irq{};
+  long softirq{};
+  long steal;
+  if (!stats.empty()) {
+    user = stol(stats[kUser_]);
+    nice = stol(stats[kNice_]);
+    system = stol(stats[kSystem_]);
+    irq = stol(stats[kIRQ_]);
+    softirq = stol(stats[kSoftIRQ_]);
+    steal = stol(stats[kSteal_]);
+  }
   return user + nice + system + irq + softirq + steal;
 }
 
 // Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies(const std::vector<string>& stats) {
-  long idle = stol(stats[kIdle_]);
-  long iowait = stol(stats[kIOwait_]);
+  long idle{};
+  long iowait{};
+  if (!stats.empty()) {
+    idle = stol(stats[kIdle_]);
+    iowait = stol(stats[kIOwait_]);
+  }
   return idle + iowait;
 }
 
@@ -193,26 +209,26 @@ int LinuxParser::RunningProcesses() {
     line_stream >> key >> processes;
   }
   return processes;
-  ;
 }
 
 // Read and return the command associated with a process
 string LinuxParser::Command(int pid) {
-  string line;
+  string line, command;
   ifstream stream{kProcDirectory + to_string(pid) + kCmdlineFilename};
   if (stream.is_open()) {
     getline(stream, line);
   }
-  return line;
+  istringstream line_stream(line);
+  line_stream >> command;
+  return command;
 }
 
-// Read and return the memory used by a process
+// Read and return the memory used by a process DEBUG:
 string LinuxParser::Ram(int pid) {
   ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
   string line, key;
-  double ram{};
-  regex exp{R"((VmSize:).*)"};
-
+  long ram{};
+  regex exp{R"((VmRSS:).*)"};
   if (stream) {
     while (getline(stream, line) && !regex_match(line, exp)) {
     }
@@ -221,8 +237,8 @@ string LinuxParser::Ram(int pid) {
   line_stream >> key >> ram;
   ram /= 1024;
   // round to one digit after decimal
-  int ramRounded = round(ram);
-  return to_string(ramRounded);
+  // int ramRounded = round(ram);
+  return to_string(ram);
 }
 
 //  Read and return the user ID associated with a process
@@ -261,7 +277,10 @@ string LinuxParser::User(int pid) {
 long LinuxParser::UpTime(int pid) {
   vector<string> stats{LinuxParser::ReadProcStats(pid)};
   long sysUpTimeInSeconds = LinuxParser::UpTime();
-  long startTime = stol(stats[pStartTime_]);
+  long startTime{};
+  if (!stats.empty()) {
+    startTime = stol(stats[pStartTime_]);
+  }
   long startTimeInSseconds = startTime / sysconf(_SC_CLK_TCK);
   long upTime = sysUpTimeInSeconds - startTimeInSseconds;
   return upTime;

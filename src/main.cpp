@@ -13,44 +13,55 @@ using namespace std::literals::chrono_literals;
 #include "system.h"
 
 int main() {
-  try {
-    System system;
-    NCursesDisplay::Display(system);
-    // DEBUG:
-    // std::cout << "System:\n"
-    //           << " ----------------------" << std::endl;
-    // std::cout << "Memory:\t" << system.MemoryUtilization() << std::endl;
-    // std::cout << "upTime:\t" << Format::ElapsedTime(system.UpTime())
-    //           << std::endl;
-    // std::cout << "Total processes:\t" << system.TotalProcesses() <<
-    // std::endl; std::cout << "Running processes:\t" <<
-    // system.RunningProcesses()
-    //           << std::endl;
-    // std::cout << "Kernel:\t" << system.Kernel() << std::endl;
-    // std::cout << "OS name:\t" << system.OperatingSystem() << std::endl;
-    // std::cout << "CPU usage:\t" << system.Cpu().Utilization() << std::endl;
+  // try {
+  System system;
+  NCursesDisplay::Display(system);
+  // DEBUG:
+  // std::cout << "System:\n"
+  //           << " ----------------------" << std::endl;
+  // std::cout << "Memory:\t" << system.MemoryUtilization() << std::endl;
+  // std::cout << "upTime:\t" << Format::ElapsedTime(system.UpTime())
+  //           << std::endl;
+  // std::cout << "Total processes:\t" << system.TotalProcesses() <<
+  // std::endl; std::cout << "Running processes:\t" <<
+  // system.RunningProcesses()
+  //           << std::endl;
+  // std::cout << "Kernel:\t" << system.Kernel() << std::endl;
+  // std::cout << "OS name:\t" << system.OperatingSystem() << std::endl;
+  // std::cout << "CPU usage:\t" << system.Cpu().Utilization() << std::endl;
+  // << " ----------------------" << std::endl;
 
-    // std::cout << "Processes:\n"
-    //           << " ----------------------" << std::endl;
-    // std::vector<Process> procs = system.Processes();
-    // for (size_t i = 0; i < procs.size(); i++) {
-    //   // for (const auto& proc : procs) {
-    //   std::cout << "PID:\t" << procs[i].Pid() << std::endl;
-    //   std::cout << "User:\t" << procs[i].User() << std::endl;
-    //   std::cout << "Command:\t" << procs[i].Command() << std::endl;
-    //   std::cout << "Process CPU:\t" << procs[i].CpuUtilization() <<
-    //   std::endl; std::cout << "Process RAM:\t" << procs[i].Ram() <<
-    //   std::endl; std::cout << "Process UpTime:\t" << procs[i].Ram() <<
-    //   std::endl; if (i < procs.size() - 1) {
-    //     std::cout << "proc[i] < proc[i+1]:\t" << std::boolalpha
-    //               << (procs[i] < procs[i + 1]) << std::endl;
-    //   }
-    //   std::cout << "--------------------------------------" << std::endl;
-    // }
+  // SINGLE PROCES debugging========================
+  // Process proc{2448};
 
-  } catch (std::exception& exept) {
-    std::cout << exept.what();
-  }
+  // std::cout << "PID:\t" << proc.Pid() << std::endl;
+  // std::cout << "User:\t" << proc.User() << std::endl;
+  // std::cout << "Command:\t" << proc.Command() << std::endl;
+  // std::cout << "Process CPU:\t" << proc.CpuUtilization() << std::endl;
+  // std::cout << "Process RAM:\t" << proc.Ram() << std::endl;
+  // std::cout << "Process UpTime:\t" << proc.UpTime() << std::endl;
+
+  // std::vector<Process> procs = system.Processes();
+  // std::cout << "Processes:\t" << procs.size() << std::endl
+  //           << "======================\n";
+  // for (size_t i = 0; i < 3; i++) {
+  //   // for (const auto& proc : procs) {
+  //   std::cout << "PID:\t" << procs[i].Pid() << std::endl;
+  //   std::cout << "User:\t" << procs[i].User() << std::endl;
+  //   std::cout << "Command:\t" << procs[i].Command() << std::endl;
+  //   std::cout << "Process CPU:\t" << procs[i].CpuUtilization() <<
+  //   std::endl; std::cout << "Process RAM:\t" << procs[i].Ram() <<
+  //   std::endl; std::cout << "Process UpTime:\t" << procs[i].UpTime() <<
+  //   std::endl; if (i < procs.size() - 1) {
+  //     std::cout << "proc[i] < proc[i+1]:\t" << std::boolalpha
+  //               << (procs[i] < procs[i + 1]) << std::endl;
+  //   }
+  //   std::cout << "--------------------------------------" << std::endl;
+  // }
+
+  // } catch (std::exception& exept) {
+  //   std::cout << exept.what();
+  // }
   // Process process{101103};
   // std::cout << "Pid:\t" << process.Pid() << std::endl;
   // std::cout << "User:\t" << process.User() << std::endl;

@@ -24,8 +24,8 @@ class System {
   Processor cpu_{};
   std::string osName_;
   std::string kernel_;
-  std::vector<int> pids_;
-  std::vector<Process> processes_;
+  // std::vector<int> pids_;//DEBUG:
+  std::vector<Process> processes_;  // DEBUG:
 };
 
 #endif
