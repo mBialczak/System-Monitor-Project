@@ -19,13 +19,19 @@ using std::to_string;
 using std::vector;
 using namespace std::literals::chrono_literals;
 
-Process::Process(int pid) : pid_(pid) { cpuUtilization_ = CpuUtilization(); };
+Process::Process(int pid) : pid_(pid) {
+  // TODO: revise
+  cpuUtilization_ = calcCPUutilization();
+};
 
 //  Return this process's ID
 int Process::Pid() const { return pid_; }
 
 // Return this process's CPU utilization
-float Process::CpuUtilization() const {
+float Process::CpuUtilization() const { return cpuUtilization_; }
+
+float Process::calcCPUutilization() const {
+  // TODO:  revise
   vector<string> stats{LinuxParser::ReadProcStats(pid_)};
   long SystemUpTime = LinuxParser::UpTime();
   long procActiveJiffies = LinuxParser::ProcessActiveJiffies(stats);

@@ -20,8 +20,8 @@ class Process {
   bool operator<(const Process& other) const;  // TODO: See src/process.cpp
 
  private:
+  float calcCPUutilization() const;
   int pid_;
-
   float cpuUtilization_;  // TODO: revise
   short userWidth{12};
   short ramWidth{6};
