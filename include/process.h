@@ -12,19 +12,27 @@ class Process {
  public:
   Process(int pid);
   int Pid() const;
-  std::string User() const;
-  std::string Command() const;
+  const std::string& User() const;
+  const std::string& Command() const;
   float CpuUtilization() const;
-  std::string Ram() const;
-  long int UpTime() const;
-  bool operator<(const Process& other) const;  // TODO: See src/process.cpp
+  const std::string& Ram() const;
+  long UpTime() const;
+  bool operator<(const Process& other) const;  // sorts by CPU utilization
 
  private:
-  float calcCPUutilization() const;
+  float CalcCPUutilization() const;
+  std::string ReadRam(int pid) const;
+  std::string ReadUser(int pid) const;
+
   int pid_;
   float cpuUtilization_;  // TODO: revise
-  short userWidth{12};
-  short ramWidth{6};
+  std::string ram_;
+  std::string command_;
+  std::string user_;
+  long upTime_;
+
+  short userWidth{12};  // for output formatting
+  short ramWidth{6};    // for output formatting
 };
 
 #endif

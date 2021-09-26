@@ -224,10 +224,10 @@ string LinuxParser::Command(int pid) {
 }
 
 // Read and return the memory used by a process DEBUG:
-string LinuxParser::Ram(int pid) {
+float LinuxParser::Ram(int pid) {
   ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
   string line, key;
-  long ram{};
+  float ram{};
   regex exp{R"((VmRSS:).*)"};
   if (stream) {
     while (getline(stream, line) && !regex_match(line, exp)) {
@@ -238,7 +238,7 @@ string LinuxParser::Ram(int pid) {
   ram /= 1024;
   // round to one digit after decimal
   // int ramRounded = round(ram);
-  return to_string(ram);
+  return ram;
 }
 
 //  Read and return the user ID associated with a process
