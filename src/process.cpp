@@ -4,13 +4,15 @@
 
 #include <cctype>
 #include <chrono>
-#include <sstream>
+#include <iomanip>  // TODO: define if needed
+#include <sstream>  // TODO: define if needed
 #include <string>
 #include <thread>
 #include <vector>
 
 #include "linux_parser.h"
 
+using std::ostringstream;  // TODO: define if needed
 using std::stoi;
 using std::string;
 using std::to_string;
@@ -46,10 +48,21 @@ float Process::CpuUtilization() const {
 string Process::Command() const { return LinuxParser::Command(pid_); }
 
 // Return this process's memory utilization
-string Process::Ram() const { return LinuxParser::Ram(pid_); }
-
+string Process::Ram() const {
+  std::ostringstream stream;
+  stream << std::right << std::setw(ramWidth) << std::setfill(' ')
+         << LinuxParser::Ram(pid_);
+  return stream.str();
+  // return LinuxParser::Ram(pid_); // TODO: clean }
+}
 // Return the user (name) that generated this process
-string Process::User() const { return LinuxParser::User(pid_); }
+string Process::User() const {
+  std::ostringstream stream;
+  stream << std::left << std::setw(userWidth) << std::setfill(' ')
+         << LinuxParser::User(pid_);
+  return stream.str();
+  // return LinuxParser::User(pid_); } //TODO: clean
+}
 
 // Return the age of this process (in seconds)
 long int Process::UpTime() const { return LinuxParser::UpTime(pid_); }

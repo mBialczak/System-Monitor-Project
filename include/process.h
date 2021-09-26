@@ -21,7 +21,10 @@ class Process {
 
  private:
   int pid_;
-  float cpuUtilization_;  // TODO revise
+
+  float cpuUtilization_;  // TODO: revise
+  short userWidth{12};
+  short ramWidth{6};
 };
 
 #endif
