@@ -4,7 +4,7 @@
 #include <unistd.h>
 
 #include <cmath>
-#include <iostream>  //TODO: remove after testing
+#include <filesystem>
 #include <regex>
 #include <string>
 #include <vector>
@@ -14,13 +14,12 @@ using std::ifstream;
 using std::istringstream;
 using std::regex;
 using std::regex_match;
-using std::stof;  // TODO: remove if redundant
-using std::stol;  // TODO: remove if redundant
+using std::stol;
 using std::string;
-using std::to_string;  // TODO: remove if redundant
+using std::to_string;
 using std::vector;
 
-// DONE: An example of how to read data from the filesystem
+// Returns name of the operating system from the filesystem
 string LinuxParser::OperatingSystem() {
   string line, key, value;
   ifstream filestream(kOSPath);
@@ -41,7 +40,7 @@ string LinuxParser::OperatingSystem() {
   return value;
 }
 
-// Read Kernel data
+// Reads Kernel data
 string LinuxParser::Kernel() {
   string os, version, kernel;
   string line;
@@ -54,27 +53,21 @@ string LinuxParser::Kernel() {
   return kernel;
 }
 
-// BONUS TODO: Update this to use std::filesystem
+// Returns the list of all processes pids
 vector<int> LinuxParser::Pids() {
   vector<int> pids;
-  DIR* directory = opendir(kProcDirectory.c_str());
-  struct dirent* file;
-  while ((file = readdir(directory)) != nullptr) {
-    // Is this a directory?
-    if (file->d_type == DT_DIR) {
-      // Is every character of the name a digit?
-      string filename(file->d_name);
-      if (std::all_of(filename.begin(), filename.end(), isdigit)) {
-        int pid = stoi(filename);
-        pids.push_back(pid);
-      }
+  string filename;
+  for (auto& entry : std::filesystem::directory_iterator(kProcDirectory)) {
+    filename = entry.path().filename();
+    if (std::all_of(filename.begin(), filename.end(), isdigit)) {
+      int pid = stoi(filename);
+      pids.emplace_back(pid);
     }
   }
-  closedir(directory);
   return pids;
 }
 
-// Read and return the system memory utilization
+// Reads the system memory utilization
 float LinuxParser::MemoryUtilization() {
   string line, key;
   float MemTotal{0.0};
@@ -94,7 +87,7 @@ float LinuxParser::MemoryUtilization() {
   }
   return result;
 }
-// Read and return the system uptime
+// Reads the system uptime
 long LinuxParser::UpTime() {
   ifstream stream{kProcDirectory + kUptimeFilename};
   double seconds{};
@@ -104,12 +97,12 @@ long LinuxParser::UpTime() {
   return static_cast<long>(std::round(seconds));
 }
 
-// Read and return the number of jiffies for the system
+// Reads the number of jiffies for the system
 long LinuxParser::Jiffies(const vector<string>& stats) {
   return ActiveJiffies(stats) + IdleJiffies(stats);
 }
 
-//  Read and return the number of active jiffies for a Process
+//  Reads the number of active jiffies for a Process
 long LinuxParser::ProcessActiveJiffies(const vector<string>& stats) {
   long uTime{};
   long sTime{};
@@ -120,7 +113,7 @@ long LinuxParser::ProcessActiveJiffies(const vector<string>& stats) {
   return uTime + sTime;
 }
 
-// Read and return the number of active jiffies for the system
+// Reads the number of active jiffies for the system
 long LinuxParser::ActiveJiffies(const vector<string>& stats) {
   long user{};
   long nice{};
@@ -139,7 +132,7 @@ long LinuxParser::ActiveJiffies(const vector<string>& stats) {
   return user + nice + system + irq + softirq + steal;
 }
 
-// Read and return the number of idle jiffies for the system
+// Reads the number of idle jiffies for the system
 long LinuxParser::IdleJiffies(const std::vector<string>& stats) {
   long idle{};
   long iowait{};
@@ -150,22 +143,21 @@ long LinuxParser::IdleJiffies(const std::vector<string>& stats) {
   return idle + iowait;
 }
 
-// Read and return CPU utilization
+// Reads the CPU utilization statistics
 vector<string> LinuxParser::CpuUtilization() {
   ifstream stream{kProcDirectory + kStatFilename};
   string line, key, value;
   vector<string> util_values;
-  if (stream) {
-    getline(stream, line);  // TODO: optimize possibly
-  }
-  istringstream line_stream(line);
-  line_stream >> key;
-  while (line_stream >> value) {
-    util_values.emplace_back(value);
+  if (stream && getline(stream, line)) {
+    istringstream line_stream(line);
+    line_stream >> key;
+    while (line_stream >> value) {
+      util_values.emplace_back(value);
+    }
   }
   return util_values;
 }
-// Read process statistics
+// Reads process statistics
 vector<string> LinuxParser::ReadProcStats(int pid) {
   ifstream stream{kProcDirectory + to_string(pid) + kStatFilename};
   string line, value;
@@ -181,7 +173,7 @@ vector<string> LinuxParser::ReadProcStats(int pid) {
   return stats;
 }
 
-// Read and return the total number of processes
+// Reads the total number of processes
 int LinuxParser::TotalProcesses() {
   ifstream stream{kProcDirectory + kStatFilename};
   string line, key;
@@ -196,7 +188,7 @@ int LinuxParser::TotalProcesses() {
   return processes;
 }
 
-// Read and return the number of running processes
+// Reads the number of running processes
 int LinuxParser::RunningProcesses() {
   ifstream stream{kProcDirectory + kStatFilename};
   string line, key;
@@ -211,19 +203,18 @@ int LinuxParser::RunningProcesses() {
   return processes;
 }
 
-// Read and return the command associated with a process
+// Reads the command associated with a process
 string LinuxParser::Command(int pid) {
   string line, command;
   ifstream stream{kProcDirectory + to_string(pid) + kCmdlineFilename};
-  if (stream.is_open()) {
-    getline(stream, line);
+  if (stream && getline(stream, line)) {
+    istringstream line_stream(line);
+    line_stream >> command;
   }
-  istringstream line_stream(line);
-  line_stream >> command;
   return command;
 }
 
-// Read and return the memory used by a process DEBUG:
+// Reads and return the memory used by a process
 float LinuxParser::Ram(int pid) {
   ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
   string line, key;
@@ -235,13 +226,10 @@ float LinuxParser::Ram(int pid) {
   }
   istringstream line_stream(line);
   line_stream >> key >> ram;
-  ram /= 1024;
-  // round to one digit after decimal
-  // int ramRounded = round(ram);
-  return ram;
+  return ram /= 1024;
 }
 
-//  Read and return the user ID associated with a process
+//  Reads the user ID associated with a process
 string LinuxParser::Uid(int pid) {
   ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
   string line, key, uid;
@@ -255,7 +243,7 @@ string LinuxParser::Uid(int pid) {
   return uid;
 }
 
-// Read and return the user associated with a process
+// Reads the user associated with a process
 string LinuxParser::User(int pid) {
   ifstream stream{kPasswordPath};
   string line, username;

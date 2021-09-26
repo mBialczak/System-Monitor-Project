@@ -2,32 +2,22 @@
 
 #include <unistd.h>
 
-#include <algorithm>  //DEBUG: maybe not needed
-#include <cstddef>
-#include <set>
+#include <algorithm>
 #include <string>
 #include <vector>
 
 #include "linux_parser.h"
 #include "process.h"
 #include "processor.h"
-using std::set;
-using std::size_t;
-using std::string;
-using std::vector;
 
 System::System()
     : osName_(LinuxParser::OperatingSystem()), kernel_(LinuxParser::Kernel()) {}
-//     pids_(LinuxParser::Pids()) { //DEBUG:
-// for (const auto& pid : pids_) {
-//   processes_.emplace_back(Process(pid));
-// }
 
 Processor& System::Cpu() { return cpu_; }
 
-// TODO: Return a container composed of the system's processes
-vector<Process>& System::Processes() {
-  vector<int> Pids{LinuxParser::Pids()};
+// Returns a container composed of the system's processes
+std::vector<Process>& System::Processes() {
+  std::vector<int> Pids{LinuxParser::Pids()};
   processes_.clear();
   processes_.reserve(Pids.size());
   for (auto pid : Pids) {
@@ -35,30 +25,18 @@ vector<Process>& System::Processes() {
   }
   std::sort(processes_.begin(), processes_.end());
   return processes_;
-  // DEBUG: old version below
-  // get current pids list and compare to previous
-  // vector<int> newPids{LinuxParser::Pids()};
-  // // if newPids != pids need to update all processes
-  // if (newPids != pids_) {
-  //   processes_.clear();
-  //   for (const auto& pid : newPids) {
-  //     processes_.emplace_back(Process(pid));
-  //   }
-  //   pids_ = newPids;
-  // }
-  // return processes_;
 }
 
-// Return the system's kernel identifier (string)
-std::string System::Kernel() const { return kernel_; }
+// Returns the system's kernel identifier (string)
+const std::string& System::Kernel() const { return kernel_; }
 
-// Return the system's memory utilization
+// Returns the system's memory utilization
 float System::MemoryUtilization() const {
   return LinuxParser::MemoryUtilization();
 }
 
-// Return the operating system name
-std::string System::OperatingSystem() const { return osName_; }
+// Returns the operating system name
+const std::string& System::OperatingSystem() const { return osName_; }
 
 // Return the number of processes actively running on the system
 int System::RunningProcesses() const { return LinuxParser::RunningProcesses(); }

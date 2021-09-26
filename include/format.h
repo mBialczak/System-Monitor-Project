@@ -5,6 +5,7 @@
 
 namespace Format {
 std::string ElapsedTime(long times);
-};
+std::string FormatPID(int pid);
+};  // namespace Format
 
 #endif

@@ -6,30 +6,12 @@
 #include "linux_parser.h"
 
 using namespace std::literals::chrono_literals;
-// TODO: REMOVE conscept if works
-/* PrevIdle = previdle + previowait
-Idle = idle + iowait
 
-PrevNonIdle = prevuser + prevnice + prevsystem + previrq + prevsoftirq +
-prevsteal
-NonIdle = user + nice + system + irq + softirq + steal
-
-PrevTotal = PrevIdle + PrevNonIdle
-Total = Idle + NonIdle
-
-# differentiate: actual value minus the previous one
-totald = Total - PrevTotal
-idled = Idle - PrevIdle
-
-CPU_Percentage = (totald - idled)/totald
-std::this_thread::sleep_for(200ms);
-*/
-
-float Processor::Utilization() {
+float Processor::Utilization() const {
   // Read CPU stats in a time interval
-  prevCpuStats = LinuxParser::CpuUtilization();
+  std::vector<std::string> prevCpuStats = LinuxParser::CpuUtilization();
   std::this_thread::sleep_for(interval);
-  cpuStats = LinuxParser::CpuUtilization();
+  std::vector<std::string> cpuStats = LinuxParser::CpuUtilization();
   // extract stats for first read
   long prevTotal = LinuxParser::Jiffies(prevCpuStats);
   long prevIdle = LinuxParser::IdleJiffies(prevCpuStats);

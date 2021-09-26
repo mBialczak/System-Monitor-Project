@@ -16,3 +16,10 @@ string Format::ElapsedTime(long seconds) {
          << std::setfill('0') << secs;
   return stream.str();
 }
+
+string Format::FormatPID(int pid) {
+  string pidString;
+  std::ostringstream stream;
+  stream << std::setw(7) << std::left << std::setfill(' ') << pid;
+  return stream.str();
+}

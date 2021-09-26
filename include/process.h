@@ -1,13 +1,8 @@
 #ifndef PROCESS_H
 #define PROCESS_H
 
-#include <chrono>
 #include <string>
-using namespace std::literals::chrono_literals;
-/*
-Basic class for Process representation
-It contains relevant attributes as shown below
-*/
+
 class Process {
  public:
   Process(int pid);
@@ -25,7 +20,7 @@ class Process {
   std::string ReadUser(int pid) const;
 
   int pid_;
-  float cpuUtilization_;  // TODO: revise
+  float cpuUtilization_;
   std::string ram_;
   std::string command_;
   std::string user_;
