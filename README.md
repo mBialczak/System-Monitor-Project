@@ -1,4 +1,5 @@
 The System-Monitor program
+<image src="images/System_Monitor.jpg">
 
 This is a relatively simply System Monitor Program created as an examination assignment  in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
