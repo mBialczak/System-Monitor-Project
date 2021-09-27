@@ -69,31 +69,18 @@ vector<int> LinuxParser::Pids() {
 
 // Reads the system memory utilization
 float LinuxParser::MemoryUtilization() {
-  string line, key;
   float MemTotal{0.0};
   float MemFree{0.0};
   float result{0.0};
-  ifstream stream{kProcDirectory + kMeminfoFilename};
-  if (stream) {
-    getline(stream, line);
-    istringstream streamTotal(line);
-    streamTotal >> key;
-    if (key == "MemTotal:") streamTotal >> MemTotal;
-    getline(stream, line);
-    istringstream streamFree(line);
-    streamFree >> key;
-    if (key == "MemFree:") streamFree >> MemFree;
-    if (MemTotal) result = (MemTotal - MemFree) / MemTotal;
-  }
+  string path{kProcDirectory + kMeminfoFilename};
+  MemTotal = findValueByKey<float>(filterMemTotalString, path);
+  MemFree = findValueByKey<float>(filterMemFreeString, path);
+  if (MemTotal) result = (MemTotal - MemFree) / MemTotal;
   return result;
 }
 // Reads the system uptime
 long LinuxParser::UpTime() {
-  ifstream stream{kProcDirectory + kUptimeFilename};
-  double seconds{};
-  if (stream) {
-    stream >> seconds;
-  }
+  double seconds = getValueFromFile<double>(kProcDirectory + kUptimeFilename);
   return static_cast<long>(std::round(seconds));
 }
 
@@ -175,72 +162,34 @@ vector<string> LinuxParser::ReadProcStats(int pid) {
 
 // Reads the total number of processes
 int LinuxParser::TotalProcesses() {
-  ifstream stream{kProcDirectory + kStatFilename};
-  string line, key;
-  int processes{};
-  regex exp{R"(processes(\s)+(\d)+)"};
-  if (stream) {
-    while (getline(stream, line) && !regex_match(line, exp)) {
-    };
-    istringstream line_stream(line);
-    line_stream >> key >> processes;
-  }
-  return processes;
+  string path{kProcDirectory + kStatFilename};
+  return findValueByKey<int>(filterProcesses, path);
+  ;
 }
 
 // Reads the number of running processes
 int LinuxParser::RunningProcesses() {
-  ifstream stream{kProcDirectory + kStatFilename};
-  string line, key;
-  int processes{};
-  regex exp{R"(procs_running(\s)+(\d)+)"};
-  if (stream) {
-    while (getline(stream, line) && !regex_match(line, exp)) {
-    };
-    istringstream line_stream(line);
-    line_stream >> key >> processes;
-  }
-  return processes;
+  string path{kProcDirectory + kStatFilename};
+  return findValueByKey<int>(filterRunningProcesses, path);
 }
 
 // Reads the command associated with a process
 string LinuxParser::Command(int pid) {
-  string line, command;
-  ifstream stream{kProcDirectory + to_string(pid) + kCmdlineFilename};
-  if (stream && getline(stream, line)) {
-    istringstream line_stream(line);
-    line_stream >> command;
-  }
-  return command;
+  return getValueFromFile<string>(kProcDirectory + to_string(pid) +
+                                  kCmdlineFilename);
 }
 
 // Reads and return the memory used by a process
 float LinuxParser::Ram(int pid) {
-  ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
-  string line, key;
-  float ram{};
-  regex exp{R"((VmRSS:).*)"};
-  if (stream) {
-    while (getline(stream, line) && !regex_match(line, exp)) {
-    }
-  }
-  istringstream line_stream(line);
-  line_stream >> key >> ram;
+  string path{kProcDirectory + to_string(pid) + kStatusFilename};
+  float ram = findValueByKey<float>(filterProcMem, path);
   return ram /= 1024;
 }
 
 //  Reads the user ID associated with a process
 string LinuxParser::Uid(int pid) {
-  ifstream stream{kProcDirectory + to_string(pid) + kStatusFilename};
-  string line, key, uid;
-  regex exp{R"((Uid:).*)"};
-  if (stream) {
-    while (getline(stream, line) && !regex_match(line, exp)) {
-    }
-  }
-  istringstream line_stream(line);
-  line_stream >> key >> uid;
-  return uid;
+  string path{kProcDirectory + to_string(pid) + kStatusFilename};
+  return findValueByKey<string>(filterUID, path);
 }
 
 // Reads the user associated with a process

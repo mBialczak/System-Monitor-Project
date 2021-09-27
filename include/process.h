@@ -12,7 +12,7 @@ class Process {
   float CpuUtilization() const;
   const std::string& Ram() const;
   long UpTime() const;
-  bool operator<(const Process& other) const;  // sorts by CPU utilization
+  bool operator>(const Process& other) const;  // sorts by CPU utilization
 
  private:
   float CalcCPUutilization() const;

@@ -7,7 +7,7 @@
 
 using namespace std::literals::chrono_literals;
 
-float Processor::Utilization() const {
+double Processor::Utilization() const {
   // Read CPU stats in a time interval
   std::vector<std::string> prevCpuStats = LinuxParser::CpuUtilization();
   std::this_thread::sleep_for(interval);
@@ -19,8 +19,8 @@ float Processor::Utilization() const {
   long total = LinuxParser::Jiffies(cpuStats);
   long idle = LinuxParser::IdleJiffies(cpuStats);
   // calc  the differences in reads
-  float totalDelta = static_cast<float>(total - prevTotal);
-  float idleDelta = static_cast<float>(idle - prevIdle);
+  double totalDelta = static_cast<double>(total - prevTotal);
+  double idleDelta = static_cast<double>(idle - prevIdle);
   // calc the final CPU percentage
   return (totalDelta - idleDelta) / (totalDelta);
 }

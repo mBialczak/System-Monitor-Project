@@ -39,8 +39,8 @@ const string& Process::User() const { return user_; }
 // Return the age of this process (in seconds)
 long Process::UpTime() const { return upTime_; }
 
-// Compares CPU ustilization of two processes
-bool Process::operator<(const Process& other) const {
+// Compares CPU utilization of two processes
+bool Process::operator>(const Process& other) const {
   return cpuUtilization_ > other.cpuUtilization_;
 }
 

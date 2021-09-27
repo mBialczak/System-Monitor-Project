@@ -2,6 +2,7 @@
 #define SYSTEM_PARSER_H
 
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -17,6 +18,14 @@ const std::string kMeminfoFilename{"/meminfo"};
 const std::string kVersionFilename{"/version"};
 const std::string kOSPath{"/etc/os-release"};
 const std::string kPasswordPath{"/etc/passwd"};
+
+// Filters for search
+const std::string filterProcesses("processes");
+const std::string filterRunningProcesses("procs_running");
+const std::string filterMemTotalString("MemTotal:");
+const std::string filterMemFreeString("MemFree:");
+const std::string filterUID("Uid:");
+const std::string filterProcMem("VmRSS:");
 
 // System
 float MemoryUtilization();
@@ -64,4 +73,42 @@ std::vector<std::string> ReadProcStats(int pid);
 long ProcessActiveJiffies(const std::vector<std::string>& stats);
 };  // namespace LinuxParser
 
+// helper templates
+
+// finds a value of type T in a file wiht line starting
+// with the given keyFilter string
+template <typename T>
+T findValueByKey(std::string const& keyFilter, std::string const& filename) {
+  std::string line, key;
+  T value;
+
+  std::ifstream stream(filename);
+  if (stream) {
+    while (std::getline(stream, line)) {
+      std::istringstream linestream(line);
+      while (linestream >> key >> value) {
+        if (key == keyFilter) {
+          return value;
+        }
+      }
+    }
+  }
+  return value;
+};
+
+// Find a value of type T in a file starting with
+// the value (without) key
+template <typename T>
+T getValueFromFile(std::string const& filename) {
+  std::string line;
+  T value;
+
+  std::ifstream stream(filename);
+  if (stream) {
+    std::getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> value;
+  }
+  return value;
+};
 #endif

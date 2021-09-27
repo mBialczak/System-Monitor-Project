@@ -1,22 +1,19 @@
-# CppND-System-Monitor
+The System-Monitor program
+<image>
+This is a relatively simply System Monitor Program created as an examination assignment  in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
-Starter code for System Monitor Project in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
-Follow along with the classroom lesson to complete the project!
+The program works from the Linux terminal.
 
-![System Monitor](images/monitor.png)
+It might need some refinements and further development, but it was made for educational purposes mainly, and as for now the further development is witheld, as spend most of my time in continuous programming learning curve.
 
-## Udacity Linux Workspace
-[Udacity](https://www.udacity.com/) provides a browser-based Linux [Workspace](https://engineering.udacity.com/creating-a-gpu-enhanced-virtual-desktop-for-udacity-497bdd91a505) for students. 
 
-You are welcome to develop this project on your local machine, and you are not required to use the Udacity Workspace. However, the Workspace provides a convenient and consistent Linux development environment we encourage you to try.
+![System Monitor](images/System_monitor.jpg)
 
 ## ncurses
 [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
 
-Within the Udacity Workspace, `.student_bashrc` automatically installs ncurses every time you launch the Workspace.
-
-If you are not using the Workspace, install ncurses within your own Linux environment: `sudo apt install libncurses5-dev libncursesw5-dev`
+For running it might be necessary to install ncurses within your own Linux environment: `sudo apt install libncurses5-dev libncursesw5-dev` (although is highly likely that it is already installed on your Linux machine).
 
 ## Make
 This project uses [Make](https://www.gnu.org/software/make/). The Makefile has four targets:

@@ -21,9 +21,9 @@ std::vector<Process>& System::Processes() {
   processes_.clear();
   processes_.reserve(Pids.size());
   for (auto pid : Pids) {
-    processes_.emplace_back(Process(pid));
+    processes_.emplace_back(pid);
   }
-  std::sort(processes_.begin(), processes_.end());
+  std::sort(processes_.begin(), processes_.end(), std::greater<Process>());
   return processes_;
 }
 
