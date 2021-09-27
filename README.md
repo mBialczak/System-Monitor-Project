@@ -9,7 +9,7 @@ The program works from the Linux terminal.
 It might need some refinements and further development, but it was made for educational purposes mainly, and as for now the further development is witheld, as spend most of my time in continuous programming learning curve.
 
 
-![System Monitor](images/System_Monitor.jpg)
+![System Monitor](images/System_Monitor2.png)
 
 ## ncurses
 [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
