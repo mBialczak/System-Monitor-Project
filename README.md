@@ -1,15 +1,24 @@
 The System-Monitor program
-<image src="images/System_Monitor.jpg">
+
+![System Monitor](images/System_Monitor2.png)
 
 This is a relatively simply System Monitor Program created as an examination assignment  in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
 
 The program works from the Linux terminal.
 
-It might need some refinements and further development, but it was made for educational purposes mainly, and as for now the further development is witheld, as spend most of my time in continuous programming learning curve.
+The program displays:
+- the name of the operating system,
+- the name of the Kernel,
+- the overall CPU usage,
+- the overal Memory usage,
+- the total number of processes of the system,
+- the number of currently running processes,
+- the time of running of the system from the start (UpTime)
+It also displays currently running processes sorted according to CPU usage.
 
+The program could use further development, but it was made for educational purposes mainly, and as for now the further development is witheld, as spend most of my time in continuous programming learning curve.
 
-![System Monitor](images/System_Monitor2.png)
 
 ## ncurses
 [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
