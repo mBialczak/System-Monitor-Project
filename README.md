@@ -1,8 +1,10 @@
-The System-Monitor program
+# The System-Monitor program - a module examination assignment for the NanoDegree C++ program
 
 ![System Monitor](images/System_Monitor2.png)
 
-This is a relatively simply System Monitor Program created as an examination assignment  in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
+## Introduction
+
+This is a relatively simple System Monitor Program created as an examination assignment in the Object Oriented Programming Course module of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
 
 The program works from the Linux terminal.
@@ -17,8 +19,7 @@ The program displays:
 - the time of running of the system from the start (UpTime)
 It also displays currently running processes sorted according to CPU usage.
 
-The program could use further development, but it was made for educational purposes mainly, and as for now the further development is witheld, as spend most of my time in continuous programming learning curve.
-
+The program could use further development in the future, but it was made for educational purposes mainly, and as for now the further development is withheld, as I spend most of my time in continuous programming learning curve.
 
 ## ncurses
 [ncurses](https://www.gnu.org/software/ncurses/) is a library that facilitates text-based graphical output in the terminal. This project relies on ncurses for display output.
@@ -39,3 +40,7 @@ This project uses [Make](https://www.gnu.org/software/make/). The Makefile has f
 2. Build the project: `make build`
 
 3. Run the resulting executable: `./build/monitor`
+
+## Disclaimer
+
+Some starter code was provided for the student (me). This included mainly the [ncurses](https://www.gnu.org/software/ncurses/) part of the code, as the assignment main goal was to implement the monitor itself, with stress on parsing the linux system files for the right information and combining everything together.
