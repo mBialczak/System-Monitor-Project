@@ -13,7 +13,7 @@ The program displays:
 - the name of the operating system,
 - the name of the Kernel,
 - the overall CPU usage,
-- the overal Memory usage,
+- the overall Memory usage,
 - the total number of processes of the system,
 - the number of currently running processes,
 - the time of running of the system from the start (UpTime)
